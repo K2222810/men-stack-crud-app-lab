@@ -9,8 +9,10 @@ const dotenv = require('dotenv');
 dotenv.config(); // loads the environment variables from the .env file 
 const Car = require('./models/Car')
 
+
 // use express (using app)
 const app = express();
+app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 app.use(methodOverride('_method'));
 app.use(morgan('dev'));
@@ -21,39 +23,41 @@ mongoose.connection.on('connected', () => {
 }) // our entry to the house is confirmed 
 
 // routes 
-app.get('/', async (req, res) => {
-  res.render('index.ejs');
-})
+app.get('/', (req, res) => {
+  res.render('index'); 
+});
 
-// INDEX
+// the  index 
 app.get('/Cars', async (req, res) => {
   const cars = await Car.find()
-  res.render('Cars/Index', { cars })
+  res.render('Cars/index', { cars })
 })
 
-// NEW
+// add new car steel
 app.get('/Cars/new', (req, res) => {
   res.render('Cars/New')
 })
 
 // post car
 app.post('/Cars', async (req, res) => {
-  await Car.create(req.body)
-  res.redirect('/Cars')
-})
+  await Car.create(req.body);
+  res.redirect('/Cars');
+});
+
+// Edits the car 
+app.get('/Cars/:id/edit', async (req, res) => {
+  const car = await Car.findById(req.params.id);
+  res.render('Cars/Edit', { car });
+});
 
 // show route - specific data 
 // url looks something like cars/:id 
 app.get('/Cars/:id', async (req, res) => {
-  const car = await Car.findById(req.params.id)
-  res.render('Cars/Show', { car })
-})
+  const car = await Car.findById(req.params.id);
+  res.render('Cars/Show', { car });
+});
 
-// Edits the car 
-app.get('/cars/:id/edit', async (req, res) => {
-  const car = await Car.findById(req.params.id)
-  res.render('cars/Edit', { car })
-})
+
 
 // Get Cars (index page)
 app.put('/Cars/:id', async (req, res) => {
