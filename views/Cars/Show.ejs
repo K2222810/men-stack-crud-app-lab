@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= fruit.name %></title> <!-- dynamically display the fruit name in the title -->
+</head>
+<body>
+  <a href="/Cars/">Back to cars!</a>
+  <h1><%= car.year %> <%= car.make %> <%= car.model %></h1>
+
+<% if (car.image) { %>
+  <img src="<%= car.image %>" width="300" />
+<% } %>
+
+<a href="/Cars/<%= car._id %>/edit">Edit</a>
+
+<form action="/Cars/<%= car._id %>?_method=DELETE" method="POST">
+  <button>Delete</button>
+</form>
+
+<a href="/Cars">Back</a>
+</body>
+</html>
+
+
+
